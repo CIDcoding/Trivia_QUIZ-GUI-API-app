@@ -23,9 +23,9 @@ class QuizUI:
         # buttons
         check_photo = PhotoImage(file='./images/true.png')
         cross_photo = PhotoImage(file='./images/false.png')
-        self.check_button = Button(image=check_photo, highlightthickness=0, borderwidth=0.5)
+        self.check_button = Button(image=check_photo, highlightthickness=0, borderwidth=0.5, command=self.check_pressed)
         self.check_button.grid(column=0, row=2)
-        self.cross_button = Button(image=cross_photo, highlightthickness=0, borderwidth=0.5)
+        self.cross_button = Button(image=cross_photo, highlightthickness=0, borderwidth=0.5, command = self.cross_pressed)
         self.cross_button.grid(column=1, row=2)
 
         self.get_next_question()
@@ -35,4 +35,11 @@ class QuizUI:
     def get_next_question(self):
         q_text = self.quiz.next_question()
         self.canvas.itemconfig(self.canvas_text, text=q_text)
+
+    def check_pressed(self):
+        self.quiz.check_answer('True')
+
+    def cross_pressed(self):
+        self.quiz.check_answer('False')
+
 
