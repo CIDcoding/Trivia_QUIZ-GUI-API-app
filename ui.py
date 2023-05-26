@@ -33,13 +33,30 @@ class QuizUI:
         self.window.mainloop()
 
     def get_next_question(self):
-        q_text = self.quiz.next_question()
-        self.canvas.itemconfig(self.canvas_text, text=q_text)
+        if self.quiz.still_has_questions():
+            self.canvas.config(bg='white')
+            self.score_label.config(text=f'Score: {self.quiz.score}/{self.quiz.question_number}')
+            q_text = self.quiz.next_question()
+            self.canvas.itemconfig(self.canvas_text, text=q_text)
+        else:
+            self.canvas.config(bg='white')
+            self.canvas.itemconfig(self.canvas_text, text='You have reached the end of the quiz!')
+            self.check_button.config(state='disabled')
+            self.cross_button.config(state='disabled')
+
 
     def check_pressed(self):
-        self.quiz.check_answer('True')
+        is_right = self.quiz.check_answer('True')
+        self.give_player_feedback(is_right)
+
 
     def cross_pressed(self):
-        self.quiz.check_answer('False')
+        is_right = self.quiz.check_answer('True')
+        self.give_player_feedback(is_right)
 
-
+    def give_player_feedback(self, is_right):
+        if is_right:
+            self.canvas.config(bg='green')
+        else:
+            self.canvas.config(bg='red')
+        self.window.after(1000, self.get_next_question)
